@@ -17,11 +17,15 @@ nav {
     flex-wrap: wrap;
 }
 
+.no-wrap {
+    flex-wrap: nowrap;
+}
+
 .league-title {
     margin-bottom: 2rem;
 }
 
-.league-wrapper {
+.match-wrapper {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -53,12 +57,21 @@ nav {
     margin-bottom: .4rem;
 }
 
-.team-icon {
+.event-wrapper .team-icon {
     width: 60px;
     height: 60px;
     margin-bottom: .6rem;
-    background-size: cover;
-    background-position: contain;
+    background-size: contain;
+    background-position: center;
+    margin-right: 0;
+}
+
+.team-icon {
+    width: 120px;
+    height: 120px;
+    background-size: contain;
+    background-position: center;
+    margin-right: 2rem;
 }
 
 .team-title {
@@ -66,11 +79,14 @@ nav {
 }
 
 .team-btn {
-    background-color: var(--primary-color);
     margin-top: .4rem;
 }
 
-.team-btn:hover {
+.btn, .btn-small {
+    background-color: var(--primary-color);
+}
+
+.btn:hover, .btn-small:hover {
     opacity: .7;
     background-color: var(--primary-color);
 }

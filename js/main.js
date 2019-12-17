@@ -20,29 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadPage(page) {
-    document.querySelector("#content").innerHTML = `
-    <div class="preloader-wrapper small active">
-        <div class="spinner-layer spinner-green-only">
-        <div class="circle-clipper left">
-            <div class="circle"></div>
-        </div><div class="gap-patch">
-            <div class="circle"></div>
-        </div><div class="circle-clipper right">
-            <div class="circle"></div>
-        </div>
-        </div>
-    </div>`;
-
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
             var content = document.querySelector("#content");
-
-            if (page === 'home') {
-                getCompetitions();
-            } else if (page === 'team') {
-                getTeamById(new URLSearchParams(window.location.search).get("id"));
-            }
 
             if (this.status == 200) {
                 content.innerHTML = xhttp.responseText;
@@ -50,6 +31,13 @@ function loadPage(page) {
                 content.innerHTML = "<p>Halaman tidak ditemukan.</p>";
             } else {
                 content.innerHTML = "<p>Ups.. halaman tidak dapat diakses.</p>";
+            }
+
+            if (page === 'home') {
+                getCompetitions();
+            } else if (page === 'team') {
+                getTeamById(new URLSearchParams(window.location.search).get("id"));
+                getMatchByTeamId(new URLSearchParams(window.location.search).get("id"));
             }
         }
     };
