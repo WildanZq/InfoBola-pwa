@@ -1,0 +1,9 @@
+:root {
+    --primary-color: #1abb3d;
+}
+
+nav {
+    background-color: var(--primary-color);
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
