@@ -8,6 +8,9 @@ var urlsToCache = [
     "/img/icon.png",
     "/img/icon192.png",
     "/js/main.js",
+    "/js/api.js",
+    "/js/db.js",
+    "/js/idb.js",
     "/pages/home.html",
     "/pages/saved.html",
     "/pages/team.html"

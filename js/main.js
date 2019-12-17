@@ -37,6 +37,13 @@ function loadPage(page) {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
             var content = document.querySelector("#content");
+
+            if (page === 'home') {
+                getCompetitions();
+            } else if (page === 'team') {
+                getTeamById(new URLSearchParams(window.location.search).get("id"));
+            }
+
             if (this.status == 200) {
                 content.innerHTML = xhttp.responseText;
             } else if (this.status == 404) {

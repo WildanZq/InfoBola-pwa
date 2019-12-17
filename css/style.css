@@ -7,3 +7,70 @@ nav {
     padding-left: 2rem;
     padding-right: 2rem;
 }
+
+#content {
+    margin-top: 4rem;
+}
+
+.d-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.league-title {
+    margin-bottom: 2rem;
+}
+
+.league-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.event-wrapper {
+    align-items: center;
+    border-radius: .3rem;
+}
+
+.event-wrapper .card-action {
+    border-bottom: 2px solid white;
+    background-color: var(--primary-color);
+}
+
+.event-vs {
+    margin: 0 2rem;
+    font-size: 1.4rem;
+    margin-top: 3rem;
+}
+
+.team-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.team-score {
+    margin-bottom: .4rem;
+}
+
+.team-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: .6rem;
+    background-size: cover;
+    background-position: contain;
+}
+
+.team-title {
+    font-size: 1.2rem;
+}
+
+.team-btn {
+    background-color: var(--primary-color);
+    margin-top: .4rem;
+}
+
+.team-btn:hover {
+    opacity: .7;
+    background-color: var(--primary-color);
+}
