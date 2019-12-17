@@ -16,12 +16,14 @@
 <body>
     <nav>
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo">InfoBola</a>
+            <a href="#" onclick="loadPage('home')" class="brand-logo">InfoBola</a>
             <ul id="nav-mobile" class="right">
-                <li><a href="saved.html">Saved</a></li>
+                <li><a href="#saved" onclick="loadPage('saved')">Saved</a></li>
             </ul>
         </div>
     </nav>
+
+    <div id="content"></div>
 
     <script src="js/main.js"></script>
 </body>

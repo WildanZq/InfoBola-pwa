@@ -7,7 +7,10 @@ var urlsToCache = [
     "/css/style.css",
     "/img/icon.png",
     "/img/icon192.png",
-    "/js/main.js"
+    "/js/main.js",
+    "/pages/home.html",
+    "/pages/saved.html",
+    "/pages/team.html"
 ];
 
 self.addEventListener("install", function (event) {
