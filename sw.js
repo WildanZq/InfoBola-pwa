@@ -10,6 +10,7 @@ var urlsToCache = [
     "/css/style.css",
     "/img/icon.png",
     "/img/icon192.png",
+    "/js/script.js",
     "/js/main.js",
     "/js/api.js",
     "/js/db.js",
@@ -62,5 +63,26 @@ self.addEventListener('activate', function (event) {
                 })
             );
         })
+    );
+});
+
+self.addEventListener('push', function (event) {
+    var body;
+    if (event.data) {
+        body = event.data.text();
+    } else {
+        body = 'Push message no payload';
+    }
+    var options = {
+        body: body,
+        icon: '/img/icon.png',
+        vibrate: [100, 50, 100],
+        data: {
+            dateOfArrival: Date.now(),
+            primaryKey: 1
+        }
+    };
+    event.waitUntil(
+        self.registration.showNotification('New Notification', options)
     );
 });
