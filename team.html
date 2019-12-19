@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>InfoBola</title>
+    <meta name="description" content="Info seputar sepakbola" />
+    <link rel="stylesheet" href="css/materialize.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="theme-color" content="#1abb3d" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="shortcut icon" href="img/icon192.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="img/icon192.png">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="./" class="brand-logo">InfoBola</a>
+            <ul id="nav-mobile" class="right">
+                <li><a href="./index.html#saved">Saved Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="content" class="container">
+        <div class="d-flex">
+            <div class="team-icon" id="icon"></div>
+            <div>
+                <h3 id="title" style="margin-top: 1rem;">Loading...</h3>
+                <a id="btn-save" class="waves-effect waves-light btn">Save</a>
+            </div>
+        </div>
+        <p id="desc"></p>
+        <h5>Next Matches</h5>
+        <div class="match-wrapper" id="next-match-wrapper">
+            <div class="preloader-wrapper small active">
+                <div class="spinner-layer spinner-green-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h5>Last Matches</h5>
+        <div class="match-wrapper" id="last-match-wrapper">
+            <div class="preloader-wrapper small active">
+                <div class="spinner-layer spinner-green-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/idb.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/team.js"></script>
+</body>
+
+</html>

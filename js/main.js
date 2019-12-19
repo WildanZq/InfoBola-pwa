@@ -34,10 +34,8 @@ function loadPage(page) {
             }
 
             if (page === 'home') {
+                // 4429 4328 4331 4337 4335 4334
                 getCompetitions();
-            } else if (page === 'team') {
-                getTeamById(new URLSearchParams(window.location.search).get("id"));
-                getMatchByTeamId(new URLSearchParams(window.location.search).get("id"));
             }
         }
     };

@@ -3,6 +3,9 @@ var urlsToCache = [
     "/",
     "/manifest.json",
     "/index.html",
+    "/team.html",
+    "/pages/home.html",
+    "/pages/saved.html",
     "/css/materialize.min.css",
     "/css/style.css",
     "/img/icon.png",
@@ -11,9 +14,7 @@ var urlsToCache = [
     "/js/api.js",
     "/js/db.js",
     "/js/idb.js",
-    "/pages/home.html",
-    "/pages/saved.html",
-    "/pages/team.html"
+    "/js/team.js",
 ];
 
 self.addEventListener("install", function (event) {
