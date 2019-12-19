@@ -144,24 +144,26 @@ function getLastMatchByTeamId(id) {
             caches.match(base_url + 'eventslast.php?id=' + id).then(function (response) {
                 if (response) {
                     let content = '';
+                    let results = [];
                     response.json().then(async function (data) {
                         for await (const n of data.results) {
                             let imgHome = '';
-                            await caches.match(base_url + 'lookupteam.php?id=' + n.idHomeTeam).then(function (response) {
+                            await caches.match(base_url + 'lookupteam.php?id=' + n.idHomeTeam).then(async function (response) {
                                 if (response) {
-                                    response.json().then(function (data) {
+                                    await response.json().then(function (data) {
                                         imgHome = data.teams[0].strTeamBadge;
                                     });
                                 }
                             });
                             let imgAway = '';
-                            await caches.match(base_url + 'lookupteam.php?id=' + n.idAwayTeam).then(function (response) {
+                            await caches.match(base_url + 'lookupteam.php?id=' + n.idAwayTeam).then(async function (response) {
                                 if (response) {
-                                    response.json().then(function (data) {
+                                    await response.json().then(function (data) {
                                         imgAway = data.teams[0].strTeamBadge;
                                     });
                                 }
                             });
+                            results.push({ ...n, imgHome, imgAway });
                             content += `
                             <div class="event-wrapper card">
                                 <div class="card-action center-align">
@@ -186,7 +188,7 @@ function getLastMatchByTeamId(id) {
                             `;
                         };
                         document.getElementById("last-match-wrapper").innerHTML = content;
-                        resolve(data);
+                        resolve(results);
                     });
                 }
             });
@@ -197,6 +199,7 @@ function getLastMatchByTeamId(id) {
             .then(json)
             .then(async function (data) {
                 let content = '';
+                let results = [];
                 for await (const n of data.results) {
                     let imgHome = '';
                     await fetch(base_url + 'lookupteam.php?id=' + n.idHomeTeam)
@@ -212,6 +215,7 @@ function getLastMatchByTeamId(id) {
                         .then(function (data) {
                             imgAway = data.teams[0].strTeamBadge;
                         }).catch(error);
+                    results.push({ ...n, imgHome, imgAway });
                     content += `
                     <div class="event-wrapper card">
                         <div class="card-action center-align">
@@ -236,7 +240,7 @@ function getLastMatchByTeamId(id) {
                     `;
                 };
                 document.getElementById("last-match-wrapper").innerHTML = content;
-                resolve(data);
+                resolve(results);
             }).catch(error);
     });
 }
@@ -248,23 +252,25 @@ function getNextMatchByTeamId(id) {
                 if (response) {
                     response.json().then(async function (data) {
                         let content = '';
+                        let events = [];
                         for await (const n of data.events) {
                             let imgHome = '';
-                            await caches.match(base_url + 'lookupteam.php?id=' + n.idHomeTeam).then(function (response) {
+                            await caches.match(base_url + 'lookupteam.php?id=' + n.idHomeTeam).then(async function (response) {
                                 if (response) {
-                                    response.json().then(function (data) {
+                                    await response.json().then(function (data) {
                                         imgHome = data.teams[0].strTeamBadge;
                                     });
                                 }
                             });
                             let imgAway = '';
-                            await caches.match(base_url + 'lookupteam.php?id=' + n.idAwayTeam).then(function (response) {
+                            await caches.match(base_url + 'lookupteam.php?id=' + n.idAwayTeam).then(async function (response) {
                                 if (response) {
-                                    response.json().then(function (data) {
+                                    await response.json().then(function (data) {
                                         imgAway = data.teams[0].strTeamBadge;
                                     });
                                 }
                             });
+                            events.push({ ...n, imgHome, imgAway });
                             content += `
                             <div class="event-wrapper card">
                                 <div class="card-action center-align">
@@ -287,7 +293,7 @@ function getNextMatchByTeamId(id) {
                             `;
                         };
                         document.getElementById("next-match-wrapper").innerHTML = content;
-                        resolve(data);
+                        resolve(events);
                     });
                 }
             });
@@ -298,6 +304,7 @@ function getNextMatchByTeamId(id) {
             .then(json)
             .then(async function (data) {
                 let content = '';
+                let events = [];
                 for await (const n of data.events) {
                     let imgHome = '';
                     await fetch(base_url + 'lookupteam.php?id=' + n.idHomeTeam)
@@ -313,6 +320,7 @@ function getNextMatchByTeamId(id) {
                         .then(function (data) {
                             imgAway = data.teams[0].strTeamBadge;
                         }).catch(error);
+                    events.push({ ...n, imgHome, imgAway });
                     content += `
                     <div class="event-wrapper card">
                         <div class="card-action center-align">
@@ -335,7 +343,94 @@ function getNextMatchByTeamId(id) {
                     `;
                 };
                 document.getElementById("next-match-wrapper").innerHTML = content;
-                resolve(data);
+                resolve(events);
             }).catch(error);
+    });
+}
+
+function getSavedTeams() {
+    getAllTeams().then(function (teams) {
+        let content = '';
+        teams.forEach(team => {
+            content += `
+            <div class="card" style="margin-right: 1rem;">
+                <div class="card-content center-align" style="padding-bottom: .6rem;">
+                    <div class="team-icon" style="background-image: url(${team.strTeamBadge}); margin: 0;"></div>
+                    <p class="team-title center-align" style="margin-top: .4rem;">
+                        <strong>${team.strTeam}</strong>
+                    </p>
+                </div>
+                <a href="team.html?id=${team.idTeam}" class="waves-effect waves-light btn-small team-btn" style="width: 100%;">
+                    Detail
+                </a>
+            </div>`;
+        });
+        document.getElementById("team-wrapper").innerHTML = content;
+    });
+}
+
+function getSavedTeamById(id) {
+    return new Promise(function (resolve, reject) {
+        getTeam(id).then(function (team) {
+            document.getElementById("title").innerHTML = team.strTeam;
+            document.getElementById("desc").innerHTML = team.strDescriptionEN;
+            document.getElementById("icon").style.backgroundImage = `url('${team.strTeamBadge}')`;
+
+            contentResult = '';
+            for (const n of team.results) {
+                contentResult += `
+                <div class="event-wrapper card">
+                    <div class="card-action center-align">
+                        <strong class="white-text">${n.dateEvent + ' ' + n.strTime}</strong>
+                    </div>
+                    <div class="card-content d-flex">
+                        <div class="team-wrapper">
+                            <strong class="team-score">${n.intHomeScore}</strong>
+                            <div class="team-icon" style="background-image: url(${n.imgHome})"></div>
+                            <strong class="team-title">${n.strEvent.split(' vs ')[0]}</strong>
+                            <a href="./team.html?id=${n.idHomeTeam}" class="waves-effect waves-light btn-small team-btn">Detail</a>
+                        </div>
+                        <strong class="event-vs">vs</strong>
+                        <div class="team-wrapper">
+                            <strong class="team-score">${n.intAwayScore}</strong>
+                            <div class="team-icon" style="background-image: url(${n.imgAway})"></div>
+                            <strong class="team-title">${n.strEvent.split(' vs ')[1]}</strong>
+                            <a href="./team.html?id=${n.idAwayTeam}" class="waves-effect waves-light btn-small team-btn">Detail</a>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
+            document.getElementById("last-match-wrapper").innerHTML = contentResult;
+
+            contentEvent = '';
+            for (const n of team.events) {
+                contentEvent += `
+                <div class="event-wrapper card">
+                    <div class="card-action center-align">
+                        <strong class="white-text">${n.dateEvent + ' ' + n.strTime}</strong>
+                    </div>
+                    <div class="card-content d-flex">
+                        <div class="team-wrapper">
+                            <div class="team-icon" style="background-image: url(${n.imgHome})"></div>
+                            <strong class="team-title">${n.strEvent.split(' vs ')[0]}</strong>
+                            <a href="./team.html?id=${n.idHomeTeam}" class="waves-effect waves-light btn-small team-btn">Detail</a>
+                        </div>
+                        <strong class="event-vs">vs</strong>
+                        <div class="team-wrapper">
+                            <div class="team-icon" style="background-image: url(${n.imgAway})"></div>
+                            <strong class="team-title">${n.strEvent.split(' vs ')[1]}</strong>
+                            <a href="./team.html?id=${n.idAwayTeam}" class="waves-effect waves-light btn-small team-btn">Detail</a>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
+            document.getElementById("next-match-wrapper").innerHTML = contentEvent;
+
+            resolve(team);
+        }).catch(function (e) {
+            reject(e);
+        });
     });
 }

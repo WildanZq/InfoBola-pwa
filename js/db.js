@@ -18,7 +18,7 @@ function saveForLater(team) {
         });
 }
 
-function getSavedTeams() {
+function getAllTeams() {
     return new Promise(function (resolve, reject) {
         dbPromised
             .then(function (db) {
@@ -32,7 +32,7 @@ function getSavedTeams() {
     });
 }
 
-function getSavedTeamById(id) {
+function getTeam(id) {
     return new Promise(function (resolve, reject) {
         dbPromised
             .then(function (db) {
@@ -42,6 +42,20 @@ function getSavedTeamById(id) {
             })
             .then(function (team) {
                 resolve(team);
+            });
+    });
+}
+
+function deleteTeamById(id) {
+    return new Promise(function (resolve, reject) {
+        dbPromised
+            .then(function (db) {
+                var tx = db.transaction('teams', 'readwrite');
+                var store = tx.objectStore('teams');
+                store.delete(id);
+                return tx.complete;
+            }).then(function (r) {
+                resolve(r);
             });
     });
 }

@@ -8,6 +8,12 @@ nav {
     padding-right: 2rem;
 }
 
+nav .brand-logo {
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
 #content {
     margin-top: 4rem;
 }
@@ -28,12 +34,12 @@ nav {
 .match-wrapper {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
 }
 
 .event-wrapper {
     align-items: center;
     border-radius: .3rem;
+    margin-right: 1rem;
 }
 
 .event-wrapper .card-action {
