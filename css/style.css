@@ -34,12 +34,18 @@ nav .brand-logo {
 .match-wrapper {
     display: flex;
     flex-wrap: wrap;
+    justify-content: start;
+    align-items: flex-start;
+}
+
+.match-wrapper > div {
+    margin-right: unset !important;
+    margin-left: unset !important;
 }
 
 .event-wrapper {
     align-items: center;
     border-radius: .3rem;
-    margin-right: 1rem;
 }
 
 .event-wrapper .card-action {
@@ -47,8 +53,13 @@ nav .brand-logo {
     background-color: var(--primary-color);
 }
 
+.event-wrapper .card-content {
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
 .event-vs {
-    margin: 0 1.6rem;
+    margin: 0 1rem;
     font-size: 1.4rem;
 }
 
@@ -56,6 +67,7 @@ nav .brand-logo {
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 76px;
 }
 
 .team-score {
@@ -68,6 +80,7 @@ nav .brand-logo {
     margin-bottom: .6rem;
     background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
     margin-right: 0;
 }
 
@@ -76,11 +89,13 @@ nav .brand-logo {
     height: 120px;
     background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
     margin-right: 2rem;
 }
 
 .team-title {
     font-size: 1.2rem;
+    text-align: center;
 }
 
 .team-btn {

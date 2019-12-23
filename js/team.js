@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 TEAM.then(function (team) {
                     NEXT_MATCH.then(function (events) {
                         LAST_MATCH.then(function (results) {
-                            saveForLater({ ...team.teams[0], events, results });
+                            saveForLater({ ...team, events, results });
                             window.location.reload(false);
                         });
                     });

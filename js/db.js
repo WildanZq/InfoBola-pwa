@@ -1,8 +1,8 @@
 const dbPromised = idb.open("infobola", 1, function (upgradeDb) {
     var articlesObjectStore = upgradeDb.createObjectStore("teams", {
-        keyPath: "idTeam"
+        keyPath: "id"
     });
-    articlesObjectStore.createIndex("strTeam", "strTeam", { unique: false });
+    articlesObjectStore.createIndex("name", "name", { unique: false });
 });
 
 function saveForLater(team) {
@@ -38,7 +38,7 @@ function getTeam(id) {
             .then(function (db) {
                 var tx = db.transaction("teams", "readonly");
                 var store = tx.objectStore("teams");
-                return store.get(id);
+                return store.get(parseInt(id));
             })
             .then(function (team) {
                 resolve(team);
@@ -52,7 +52,7 @@ function deleteTeamById(id) {
             .then(function (db) {
                 var tx = db.transaction('teams', 'readwrite');
                 var store = tx.objectStore('teams');
-                store.delete(id);
+                store.delete(parseInt(id));
                 return tx.complete;
             }).then(function (r) {
                 resolve(r);
