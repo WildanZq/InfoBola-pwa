@@ -1,70 +1,58 @@
-const CACHE_NAME = "infobola-v1";
-var urlsToCache = [
-    "/",
-    "/manifest.json",
-    "/index.html",
-    "/team.html",
-    "/pages/home.html",
-    "/pages/saved.html",
-    "/css/materialize.min.css",
-    "/css/style.css",
-    "/img/icon.png",
-    "/img/icon192.png",
-    "/js/script.js",
-    "/js/main.js",
-    "/js/api.js",
-    "/js/db.js",
-    "/js/idb.js",
-    "/js/team.js",
-];
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js');
 
-self.addEventListener("install", function (event) {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then(function (cache) {
-            return cache.addAll(urlsToCache);
-        })
-    );
-});
+if (workbox)
+    console.log(`Workbox berhasil dimuat`);
+else
+    console.log(`Workbox gagal dimuat`);
 
-self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        caches.match(event.request, { cacheName: CACHE_NAME })
-            .then(function (response) {
-                if (response) {
-                    return response;
-                }
-                var fetchRequest = event.request.clone();
-                return fetch(fetchRequest).then(
-                    function (response) {
-                        if (!response || response.status !== 200) {
-                            return response;
-                        }
-                        var responseToCache = response.clone();
-                        caches.open(CACHE_NAME)
-                            .then(function (cache) {
-                                cache.put(event.request, responseToCache);
-                            });
-                        return response;
-                    }
-                );
-            })
-    );
-});
+workbox.precaching.precacheAndRoute([
+    { url: '/', revision: '1' },
+    { url: '/manifest.json', revision: '1' },
+    { url: '/index.html', revision: '1' },
+    { url: '/team.html', revision: '1' },
+    { url: '/pages/home.html', revision: '1' },
+    { url: '/pages/saved.html', revision: '1' },
+    { url: '/css/materialize.min.css', revision: '1' },
+    { url: '/css/style.css', revision: '1' },
+    { url: '/img/icon.png', revision: '1' },
+    { url: '/img/icon192.png', revision: '1' },
+    { url: '/js/script.js', revision: '1' },
+    { url: '/js/main.js', revision: '1' },
+    { url: '/js/api.js', revision: '1' },
+    { url: '/js/db.js', revision: '1' },
+    { url: '/js/idb.js', revision: '1' },
+    { url: '/js/team.js', revision: '1' },
+]);
 
-self.addEventListener('activate', function (event) {
-    console.log('Aktivasi service worker baru');
-    event.waitUntil(
-        caches.keys().then(function (cacheNames) {
-            return Promise.all(
-                cacheNames.map(function (cacheName) {
-                    if (cacheName !== CACHE_NAME && cacheName.startsWith("tutorial")) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
-    );
-});
+workbox.routing.registerRoute(
+    /^https:\/\/api\.football-data\.org\/v2/,
+    workbox.strategies.networkFirst({
+        networkTimeoutSeconds: 3,
+        cacheName: 'football-data',
+        plugins: [
+            new workbox.cacheableResponse.Plugin({
+                statuses: [0, 200],
+            }),
+            new workbox.expiration.Plugin({
+                maxAgeSeconds: 60 * 60 * 24,
+                maxEntries: 60,
+            }),
+        ],
+    })
+);
+
+workbox.routing.registerRoute(
+    /\.(?:png|gif|jpg|jpeg|svg)$/,
+    workbox.strategies.cacheFirst({
+        cacheName: 'images',
+        plugins: [
+            new workbox.expiration.Plugin({
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+                maxEntries: 60,
+            }),
+        ],
+    }),
+);
 
 self.addEventListener('push', function (event) {
     var body;
