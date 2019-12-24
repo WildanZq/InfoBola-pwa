@@ -67,13 +67,9 @@ function getCompetitions() {
     if ('caches' in window) {
         caches.match(base_url + 'competitions/2021/matches?status=SCHEDULED&dateFrom=' + getDateNow() + '&dateTo=' + getDateNextWeek()).then(function (response) {
             if (response) {
-                response.json().then(async function (data) {
+                response.json().then(function (data) {
                     let content = '';
-                    for await (const n of data.matches) {
-                        let imgHome = await getTeamData(n.homeTeam.id);
-                        imgHome = imgHome.crestUrl.replace(/^http:\/\//i, 'https://');
-                        let imgAway = await getTeamData(n.awayTeam.id);
-                        imgAway = imgAway.crestUrl.replace(/^http:\/\//i, 'https://');
+                    for (const n of data.matches) {
                         content += `
                         <div class="col l4 m6 s12">
                         <div class="event-wrapper card">
@@ -82,13 +78,11 @@ function getCompetitions() {
                             </div>
                             <div class="card-content d-flex">
                                 <div class="team-wrapper">
-                                    <div class="team-icon" style="background-image: url(${imgHome})"></div>
                                     <strong class="team-title">${n.homeTeam.name}</strong>
                                     <a href="./team.html?id=${n.homeTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                                 </div>
                                 <strong class="event-vs">vs</strong>
                                 <div class="team-wrapper">
-                                    <div class="team-icon" style="background-image: url(${imgAway})"></div>
                                     <strong class="team-title">${n.awayTeam.name}</strong>
                                     <a href="./team.html?id=${n.awayTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                                 </div>
@@ -106,13 +100,9 @@ function getCompetitions() {
     fetchTo(base_url + 'competitions/2021/matches?status=SCHEDULED&dateFrom=' + getDateNow() + '&dateTo=' + getDateNextWeek())
         .then(status)
         .then(json)
-        .then(async function (data) {
+        .then(function (data) {
             let content = '';
-            for await (const n of data.matches) {
-                let imgHome = await getTeamData(n.homeTeam.id);
-                imgHome = imgHome.crestUrl.replace(/^http:\/\//i, 'https://');
-                let imgAway = await getTeamData(n.awayTeam.id);
-                imgAway = imgAway.crestUrl.replace(/^http:\/\//i, 'https://');
+            for (const n of data.matches) {
                 content += `
                 <div class="col l4 m6 s12">
                 <div class="event-wrapper card">
@@ -121,13 +111,11 @@ function getCompetitions() {
                     </div>
                     <div class="card-content d-flex">
                         <div class="team-wrapper">
-                            <div class="team-icon" style="background-image: url(${imgHome})"></div>
                             <strong class="team-title">${n.homeTeam.name}</strong>
                             <a href="./team.html?id=${n.homeTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                         </div>
                         <strong class="event-vs">vs</strong>
                         <div class="team-wrapper">
-                            <div class="team-icon" style="background-image: url(${imgAway})"></div>
                             <strong class="team-title">${n.awayTeam.name}</strong>
                             <a href="./team.html?id=${n.awayTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                         </div>
@@ -197,14 +185,8 @@ function getLastMatchByTeamId(id) {
             caches.match(base_url + 'teams/' + id + '/matches?status=FINISHED&dateFrom=' + getDateLastMonth() + '&dateTo=' + getDateNow()).then(function (response) {
                 if (response) {
                     let content = '';
-                    let results = [];
-                    response.json().then(async function (data) {
-                        for await (const n of data.matches) {
-                            let imgHome = await getTeamData(n.homeTeam.id);
-                            imgHome = imgHome.crestUrl.replace(/^http:\/\//i, 'https://');
-                            let imgAway = await getTeamData(n.awayTeam.id);
-                            imgAway = imgAway.crestUrl.replace(/^http:\/\//i, 'https://');
-                            results.push({ ...n, imgHome, imgAway });
+                    response.json().then(function (data) {
+                        for (const n of data.matches) {
                             content += `
                             <div class="col l4 m6 s12">
                             <div class="event-wrapper card">
@@ -214,14 +196,12 @@ function getLastMatchByTeamId(id) {
                                 <div class="card-content d-flex">
                                     <div class="team-wrapper">
                                         <strong class="team-score">${n.score.fullTime.homeTeam}</strong>
-                                        <div class="team-icon" style="background-image: url(${imgHome})"></div>
                                         <strong class="team-title">${n.homeTeam.name}</strong>
                                         <a href="./team.html?id=${n.homeTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                                     </div>
                                     <strong class="event-vs">vs</strong>
                                     <div class="team-wrapper">
                                         <strong class="team-score">${n.score.fullTime.awayTeam}</strong>
-                                        <div class="team-icon" style="background-image: url(${imgAway})"></div>
                                         <strong class="team-title">${n.awayTeam.name}</strong>
                                         <a href="./team.html?id=${n.awayTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                                     </div>
@@ -231,7 +211,7 @@ function getLastMatchByTeamId(id) {
                             `;
                         };
                         document.getElementById("last-match-wrapper").innerHTML = content;
-                        resolve(results);
+                        resolve(data);
                     });
                 }
             });
@@ -242,13 +222,7 @@ function getLastMatchByTeamId(id) {
             .then(json)
             .then(async function (data) {
                 let content = '';
-                let results = [];
                 for await (const n of data.matches) {
-                    let imgHome = await getTeamData(n.homeTeam.id);
-                    imgHome = imgHome.crestUrl.replace(/^http:\/\//i, 'https://');
-                    let imgAway = await getTeamData(n.awayTeam.id);
-                    imgAway = imgAway.crestUrl.replace(/^http:\/\//i, 'https://');
-                    results.push({ ...n, imgHome, imgAway });
                     content += `
                     <div class="col l4 m6 s12">
                     <div class="event-wrapper card">
@@ -258,14 +232,12 @@ function getLastMatchByTeamId(id) {
                         <div class="card-content d-flex">
                             <div class="team-wrapper">
                                 <strong class="team-score">${n.score.fullTime.homeTeam}</strong>
-                                <div class="team-icon" style="background-image: url(${imgHome})"></div>
                                 <strong class="team-title">${n.homeTeam.name}</strong>
                                 <a href="./team.html?id=${n.homeTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                             </div>
                             <strong class="event-vs">vs</strong>
                             <div class="team-wrapper">
                                 <strong class="team-score">${n.score.fullTime.awayTeam}</strong>
-                                <div class="team-icon" style="background-image: url(${imgAway})"></div>
                                 <strong class="team-title">${n.awayTeam.name}</strong>
                                 <a href="./team.html?id=${n.awayTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                             </div>
@@ -275,7 +247,7 @@ function getLastMatchByTeamId(id) {
                     `;
                 };
                 document.getElementById("last-match-wrapper").innerHTML = content;
-                resolve(results);
+                resolve(data);
             }).catch(error);
     });
 }
@@ -287,13 +259,7 @@ function getNextMatchByTeamId(id) {
                 if (response) {
                     response.json().then(async function (data) {
                         let content = '';
-                        let events = [];
                         for await (const n of data.matches) {
-                            let imgHome = await getTeamData(n.homeTeam.id);
-                            imgHome = imgHome.crestUrl.replace(/^http:\/\//i, 'https://');
-                            let imgAway = await getTeamData(n.awayTeam.id);
-                            imgAway = imgAway.crestUrl.replace(/^http:\/\//i, 'https://');
-                            events.push({ ...n, imgHome, imgAway });
                             content += `
                             <div class="col l4 m6 s12">
                             <div class="event-wrapper card">
@@ -302,13 +268,11 @@ function getNextMatchByTeamId(id) {
                                 </div>
                                 <div class="card-content d-flex">
                                     <div class="team-wrapper">
-                                        <div class="team-icon" style="background-image: url(${imgHome})"></div>
                                         <strong class="team-title">${n.homeTeam.name}</strong>
                                         <a href="./team.html?id=${n.homeTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                                     </div>
                                     <strong class="event-vs">vs</strong>
                                     <div class="team-wrapper">
-                                        <div class="team-icon" style="background-image: url(${imgAway})"></div>
                                         <strong class="team-title">${n.awayTeam.name}</strong>
                                         <a href="./team.html?id=${n.awayTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                                     </div>
@@ -318,7 +282,7 @@ function getNextMatchByTeamId(id) {
                             `;
                         };
                         document.getElementById("next-match-wrapper").innerHTML = content;
-                        resolve(events);
+                        resolve(data);
                     });
                 }
             });
@@ -329,13 +293,7 @@ function getNextMatchByTeamId(id) {
             .then(json)
             .then(async function (data) {
                 let content = '';
-                let events = [];
                 for await (const n of data.matches) {
-                    let imgHome = await getTeamData(n.homeTeam.id);
-                    imgHome = imgHome.crestUrl.replace(/^http:\/\//i, 'https://');
-                    let imgAway = await getTeamData(n.awayTeam.id);
-                    imgAway = imgAway.crestUrl.replace(/^http:\/\//i, 'https://');
-                    events.push({ ...n, imgHome, imgAway });
                     content += `
                     <div class="col l4 m6 s12">
                     <div class="event-wrapper card">
@@ -344,13 +302,11 @@ function getNextMatchByTeamId(id) {
                         </div>
                         <div class="card-content d-flex">
                             <div class="team-wrapper">
-                                <div class="team-icon" style="background-image: url(${imgHome})"></div>
                                 <strong class="team-title">${n.homeTeam.name}</strong>
                                 <a href="./team.html?id=${n.homeTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                             </div>
                             <strong class="event-vs">vs</strong>
                             <div class="team-wrapper">
-                                <div class="team-icon" style="background-image: url(${imgAway})"></div>
                                 <strong class="team-title">${n.awayTeam.name}</strong>
                                 <a href="./team.html?id=${n.awayTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                             </div>
@@ -360,7 +316,7 @@ function getNextMatchByTeamId(id) {
                     `;
                 };
                 document.getElementById("next-match-wrapper").innerHTML = content;
-                resolve(events);
+                resolve(data);
             }).catch(error);
     });
 }
@@ -396,7 +352,7 @@ function getSavedTeamById(id) {
             document.getElementById("icon").style.backgroundImage = `url('${team.crestUrl.replace(/^http:\/\//i, 'https://')}')`;
 
             contentResult = '';
-            for (const n of team.results) {
+            for (const n of team.results.matches) {
                 contentResult += `
                 <div class="col l4 m6 s12">
                 <div class="event-wrapper card">
@@ -406,14 +362,12 @@ function getSavedTeamById(id) {
                     <div class="card-content d-flex">
                         <div class="team-wrapper">
                             <strong class="team-score">${n.score.fullTime.homeTeam}</strong>
-                            <div class="team-icon" style="background-image: url(${n.imgHome})"></div>
                             <strong class="team-title">${n.homeTeam.name}</strong>
                             <a href="./team.html?id=${n.homeTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                         </div>
                         <strong class="event-vs">vs</strong>
                         <div class="team-wrapper">
                             <strong class="team-score">${n.score.fullTime.awayTeam}</strong>
-                            <div class="team-icon" style="background-image: url(${n.imgAway})"></div>
                             <strong class="team-title">${n.awayTeam.name}</strong>
                             <a href="./team.html?id=${n.awayTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                         </div>
@@ -425,7 +379,7 @@ function getSavedTeamById(id) {
             document.getElementById("last-match-wrapper").innerHTML = contentResult;
 
             contentEvent = '';
-            for (const n of team.events) {
+            for (const n of team.events.matches) {
                 contentEvent += `
                 <div class="col l4 m6 s12">
                 <div class="event-wrapper card">
@@ -434,13 +388,11 @@ function getSavedTeamById(id) {
                     </div>
                     <div class="card-content d-flex">
                         <div class="team-wrapper">
-                            <div class="team-icon" style="background-image: url(${n.imgHome})"></div>
                             <strong class="team-title">${n.homeTeam.name}</strong>
                             <a href="./team.html?id=${n.homeTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                         </div>
                         <strong class="event-vs">vs</strong>
                         <div class="team-wrapper">
-                            <div class="team-icon" style="background-image: url(${n.imgAway})"></div>
                             <strong class="team-title">${n.awayTeam.name}</strong>
                             <a href="./team.html?id=${n.awayTeam.id}" class="waves-effect waves-light btn-small team-btn">Detail</a>
                         </div>
